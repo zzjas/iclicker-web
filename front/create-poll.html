@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="common.css">
+    <script src="./browser.js"></script>
+    <title>Create A Poll</title>
+</head>
+<body>
+    <table>
+        <caption>Create A Poll</caption>
+        <tr>
+            <th>Question:</th>
+            <td><input type="text" name="question" id="question"></td>
+        </tr>
+        <tr>
+            <th>Time Limit:</th>
+            <td><input type="text" name="time" id="time"></td>
+        </tr>
+        <tr>
+            <th>A:</th>
+            <td><input type="text" name="choiceA" id="choiceA"></td>
+        </tr>
+        <tr>
+            <th>B:</th>
+            <td><input type="text" name="choiceB" id="choiceB"></td>
+        </tr>
+        <tr>
+            <th>C:</th>
+            <td><input type="text" name="choiceC" id="choiceC"></td>
+        </tr>
+        <tr>
+            <th>D:</th>
+            <td><input type="text" name="choiceD" id="choiceD"></td>
+        </tr>
+        <tr>
+            <th>E:</th>
+            <td><input type="text" name="choiceE" id="choiceE"></td>
+        </tr>
+    </table>
+    <button onclick="createPollAndStart()">Start</button>
+</body>
+</html>

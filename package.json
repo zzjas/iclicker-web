@@ -1,0 +1,26 @@
+{
+  "name": "iclicker-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zzjas/iclicker-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zzjas/iclicker-web/issues"
+  },
+  "homepage": "https://github.com/zzjas/iclicker-web#readme",
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "readline-sync": "^1.4.9"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
