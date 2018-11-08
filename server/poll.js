@@ -1,77 +1,37 @@
-const readline = require('readline');
-const rl = require('readline-sync');
+const fs = require('fs');
 
-const recorder = require('record');
+var polling = false;
+/*
+    TODO
+    Read fake-poll.json
+    Need to modify
+*/
+const collectResult = () => {
+    console.log('Reading fake poll...');
+    
+    let path = './fake-poll.json';
+    let result = JSON.parse(fs.readFileSync(path, 'utf8')).r;
+    console.log('Got fake result:');
+    resultToString(result);
 
-var inited = false;
-var recording = false;
-var result = [];
-
-const init = (record) => {
-    inited = true;
-    recording = record; 
-};
-
-const isInit = () => {
-    console.log("Poll is started");
-    return inited;
-};
-
-const stop = () => {
-    console.log("Poll is stoped.");
-};
-
-const destry = () => {
-    inited = false;
-    recording = false;
-    console.log("This poll is destried.");
-};
-
-const start = () => {
-    collectResult();
-};
-
-const stop = (option) => {
-    sendResult(option);
-    sendOption();
-};
-
-function collectResult() {
-    while(true) {
-        let res = {
-            id: null,
-            result: null
-        };
-        rl.question('Enter iClicker ID: ', (ans) => {
-            if(!ans.length) { break; }
-            res.id = ans;
-        });
-        rl.question('Enter ChoiceL ', (ans) => {
-            res.result = ans;
-        })
-        result.push(res);
-    }
+    console.log('Sending data to recorder...\n');
+    return result;
 }
 
-function sendResult(option) {
-    let stat = {
-        a:0,
-        b:0,
-        c:0,
-        d:0,
-        e:0
-    }
-    let a = b = c = d = e = 0;
-    result.forEach(res => {
-        switch (res.result) {
-            case 'A': stat.a++; break; 
-            case 'B': stat.b++; break; 
-            case 'C': stat.c++; break; 
-            case 'D': stat.d++; break; 
-            case 'E': stat.e++; break; 
-        }
-        if(option) {
-
-        }
+function resultToString(result) {
+    result.forEach(element => {
+        //console.log(`ID: ${element.ID} --> ${element.Vote}`);
     });
+}
+
+const startPoll = () => {
+    console.log('Poll started');
+    
+}
+
+
+module.exports = {
+    'startPoll': startPoll,
+    'collectResult': collectResult,
+    'polling': polling
 }
