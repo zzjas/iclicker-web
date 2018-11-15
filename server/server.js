@@ -1,33 +1,61 @@
 const express = require('express');
-const poll = require('poll');
+
+const poll = require('./poll');
+const recorder = require('./record');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.post('/api/create-poll', (req, res) => {
-  if(!poll.isInit()) {
-    poll.init();
-  }
-  else {
-    //TODO: Error here
-  }
+/******************************** record.js *********************************/
+
+/**
+ * Send out a list of session names
+ */
+app.get('/api/sessionlist', (req, res) => {
+    var names = recorder.getSessions();
 });
 
-app.post('/api/create-record', (req, res) => {
-   if(!poll.isInit()) {
-    poll.init();
-  }
-  else {
-    //TODO: Error here
-  } 
+/**
+ * Send out record file for the given session
+ */
+app.get('/api/records', (req, res) => {
+    var records = recorder.getRecords(sessionName);
 });
 
-app.get('/api/end-poll', (req, res) => {
-  if(poll.working()) {
-    poll.stop();
-  }
+/**
+ * Save the new record into database
+ */
+app.post('/api/save', (req, res) => {
+    var newRecord;
+    recorder.save(sesseionName, newRecord);
 });
 
-app.get('/api/destry-poll', (req, res) => {
-  poll.destry();
+/********************************* poll.js **********************************/
+
+/**
+ * Get the status of currect poll.
+ */
+app.get('/api/status', (req, res) => {
+    var status = poll.status();
+    status = -1('Not Connect') || 0('Not Polling') || 1('Polling');
+});
+
+/**
+ * End current poll.
+ */
+app.get('/api/end', (req, res) => {
+    var end = poll.end();
+    end = true || false;
+});
+
+/**
+ * Get result file of current poll.
+ */
+app.get('/api/result', (req, res) => {
+    var result = poll.result();
+    result = {
+        "ID1":"A",
+        "ID2":"B",
+        "ID3":"C"
+    };
 });
