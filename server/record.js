@@ -109,7 +109,7 @@ const classifyResult = (sessionName, catN, result) => {
     };
     for(var i = 0; i < result.length; i++) {
         let element = result[i];
-        let op = record.students[element.ID];
+        let op = record.students[element.ID]-1;
         switch(element.Vote) {
             case 'A': cr['A'].total++; 
             cr['A'].dist[op]++;
@@ -184,7 +184,7 @@ function getRecInfo() {
     }
     return re;
 }
-/*
+
 (() => {
     initRecord(getRecInfo());
     printRecord();
@@ -192,7 +192,7 @@ function getRecInfo() {
     printRecord();
     storeRecord();
 })();
-*/
+
 module.exports = {
     'initRecord': initRecord,
     'startPoll': startPoll,
