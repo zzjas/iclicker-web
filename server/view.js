@@ -2,6 +2,7 @@ const rl = require('readline-sync');
 const recorder = require('./record');
 const poll = require('./poll');
 const Table =  require('cli-table');
+
 (() => {
     let session = rl.question('What class: ');
     console.log('Start a poll first.');
@@ -14,7 +15,7 @@ const Table =  require('cli-table');
     let cats = recorder.getCategories(session);
     console.log('We have:');
     
-    for(var i = 0; i < cats.length; i++) {
+    for(let i = 0; i < cats.length; i++) {
         console.log(`${i+1}: ${cats[i]}`);
     }
 
@@ -22,14 +23,15 @@ const Table =  require('cli-table');
     catN--;
     let cr = recorder.classifyResult(session, catN, result);
 
-    console.log(`After classificaiton, we got ${JSON.stringify(cr)}`)
+    console.log(`After classification, we got ${JSON.stringify(cr)}`)
+
     const tb = new Table();
     let opline = [''];
-    for(var i = 0; i < cr.options.length; i++) {
+    for(let i = 0; i < cr.options.length; i++) {
         opline.push(`\t${cr.options[i]}`);
     }
     tb.push(opline);
-    for(var i = 0; i < 5; i++) {
+    for(let i = 0; i < 5; i++) {
         let line = [];
         switch (i) {
             case 0: line.push('A'); break;

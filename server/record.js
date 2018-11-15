@@ -56,15 +56,6 @@ const storeRecord = () => {
     console.log(`Written in ${path}`);
 };
 
-
-
-
-
-
-
-
-
-
 const getCategories = (sessionName) => {
     let path = "./db/" + sessionName + ".json";
     let session = null;
