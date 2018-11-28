@@ -62,3 +62,6 @@ typings/
 
 # for webstorm
 .idea/
+
+# for Visual Studio Code
+*.code-workspace
