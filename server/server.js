@@ -1,33 +1,13 @@
 const express = require('express');
-const poll = require('poll');
+const Poll = require('./poll');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const poll = new Poll();
 
-app.post('/api/create-poll', (req, res) => {
-  if(!poll.isInit()) {
-    poll.init();
-  }
-  else {
-    //TODO: Error here
-  }
+poll.listen();
+
+app.get('/', (req, res) => {
+    res.json(poll.result);
 });
 
-app.post('/api/create-record', (req, res) => {
-   if(!poll.isInit()) {
-    poll.init();
-  }
-  else {
-    //TODO: Error here
-  } 
-});
-
-app.get('/api/end-poll', (req, res) => {
-  if(poll.working()) {
-    poll.stop();
-  }
-});
-
-app.get('/api/destry-poll', (req, res) => {
-  poll.destry();
-});
+app.listen(5000);
