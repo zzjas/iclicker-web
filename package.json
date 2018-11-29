@@ -18,10 +18,12 @@
   "homepage": "https://github.com/zzjas/iclicker-web#readme",
   "devDependencies": {
     "cli-table": "^0.3.1",
+    "eslint": "^5.9.0",
     "readline-sync": "^1.4.9"
   },
   "dependencies": {
     "express": "^4.16.4",
-    "node-hid": "^0.7.3"
+    "node-hid": "^0.7.3",
+    "semantic-ui": "^2.4.2"
   }
 }

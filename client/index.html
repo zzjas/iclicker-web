@@ -4,13 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="common.css">
-    <script src="./browser.js"></script>
-    <title>iClicker Start Page</title>
+    <title>Test</title>
+    <link rel="stylesheet" type="text/css" href="./style/semantic/dist/semantic.min.css">
+    <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+    <script src="./style/semantic/dist/semantic.min.js"></script>
+    <link rel="stylesheet" href="./style/main.css">
+    <script src="./js/main.js" type="module"></script>
 </head>
 <body>
-    <p><button id="start" onclick="start()">Start</button></p>
-    <p><button id="quickStart" onclick="quickStart()">Quick Start</button></p>
-    <p><button id="record" onclick="record()">Record</button></p>
+    <div id="left-panel">
+        <div id="graph"><p>Graph Placeholder</p></div>
+
+
+        <button id="refresh" class="circular ui icon button">
+            <i class="sync icon"></i>
+        </button>
+
+        <button id="prev" class="ui left labeled icon button">
+            <i class="left arrow icon"></i>
+            Prev
+        </button>
+
+        <button id="next" class="ui right labeled icon button">
+            <i class="right arrow icon"></i>
+            Next
+        </button>
+
+        <button id="end" class="circular ui icon button">
+            <i class="stop icon"></i>
+        </button>
+
+    </div>
+    <div id="right-panel">
+        <h1>Categories</h1>
+        <button id="add" class="ui left labeled icon button">
+            <i class="plus square icon"></i>
+            New Category
+        </button>
+        <ul id="catList">
+        </ul>
+    </div>
 </body>
 </html>
