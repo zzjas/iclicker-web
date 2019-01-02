@@ -18,7 +18,7 @@
   "homepage": "https://github.com/zzjas/iclicker-web#readme",
   "devDependencies": {
     "cli-table": "^0.3.1",
-    "eslint": "^5.9.0",
+    "eslint": "5.6.0",
     "readline-sync": "^1.4.9"
   },
   "dependencies": {
