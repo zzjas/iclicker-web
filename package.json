@@ -2,9 +2,13 @@
   "name": "iclicker-web",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "repository": {
     "type": "git",
@@ -17,13 +21,20 @@
   },
   "homepage": "https://github.com/zzjas/iclicker-web#readme",
   "devDependencies": {
-    "cli-table": "^0.3.1",
-    "eslint": "5.6.0",
-    "readline-sync": "^1.4.9"
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-scripts": "2.1.2"
   },
   "dependencies": {
+    "cli-table": "^0.3.1",
+    "readline-sync": "^1.4.9",
     "express": "^4.16.4",
-    "node-hid": "^0.7.3",
-    "semantic-ui": "^2.4.2"
-  }
+    "node-hid": "^0.7.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
