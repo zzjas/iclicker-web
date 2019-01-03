@@ -20,16 +20,16 @@
     "url": "https://github.com/zzjas/iclicker-web/issues"
   },
   "homepage": "https://github.com/zzjas/iclicker-web#readme",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "@material-ui/core": "^3.8.1",
+    "chart.js": "^2.7.3",
+    "express": "^4.16.4",
+    "node-hid": "^0.7.3",
     "react": "^16.7.0",
+    "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2"
-  },
-  "dependencies": {
-    "cli-table": "^0.3.1",
-    "readline-sync": "^1.4.9",
-    "express": "^4.16.4",
-    "node-hid": "^0.7.3"
   },
   "browserslist": [
     ">0.2%",
