@@ -23,6 +23,7 @@
   "devDependencies": {},
   "dependencies": {
     "@material-ui/core": "^3.8.1",
+    "@material-ui/icons": "^3.0.1",
     "chart.js": "^2.7.3",
     "express": "^4.16.4",
     "node-hid": "^0.7.3",
