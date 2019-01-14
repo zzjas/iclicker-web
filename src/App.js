@@ -8,6 +8,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 
+import Data from './Data';
+import Poll from './Poll';
+
 
 const drawerWidth = 240;
 
@@ -39,61 +42,31 @@ const styles = theme => ({
 class App extends Component {
     constructor(props) {
         super(props);
+        this.data = new Data();
+        this.poll = new Poll();
+
+        let f_categories = this.data.getCategories();
+        let f_chosenCategory = f_categories[0];
+        let f_poll = this.poll.getPoll();
+
         this.state = {
-            courseID: 'ece15',
-            categories: this.getCategories(), 
-            chosenCategory: [],
-            poll: this.getPoll(),
-            parsedResult: this.getParsedResult(),
-            colorSet: this.getColorSet()
+            categories: f_categories,
+            chosenCategory: f_chosenCategory,
+            poll: f_poll,
+            parsedResult: this.data.getParsedResult(f_chosenCategory, f_poll)
         };
 
         this.chooseCategory = this.chooseCategory.bind(this);
     }
 
+
+
     chooseCategory(category) {
-        this.setState({chosenCategory: [category]});
+        this.setState({ 
+            chosenCategory: [category],
+            parsedResult: this.data.getParsedResult(category)
+        });
     }
-
-    getColorSet() {
-        return ["#2081C3", "#E3C0D3"];
-    }
-
-    getParsedResult() {
-        return {
-            A : [10, 5],
-            B : [15, 10],
-            C : [20, 10],
-            D : [15, 5],
-            E : [10, 10]
-        }
-    }
-
-
-    getCategories() {
-        function cat(t, opts) {
-            return {
-                title: t,
-                options: opts
-            };
-        }
-
-        return [
-            cat("Know Programming Or Not",
-                ["Expert","Familiar","Medium","A little","New"]),
-            cat("Which Steak",
-                ["Rare","Medium Rare","Medium","Medium Well","Well Done"]),
-            cat("How much do you like C language",
-                ["10","9","8","7","6","5","4","3","2","1"])
-        ];
-    }
-
-    getPoll() {
-        return {
-
-        };
-    }
-
 
 
     render() {
@@ -118,10 +91,11 @@ class App extends Component {
                     </Toolbar>
                 </AppBar>
                 <SideBar categories={this.state.categories}
-                         chooseCategory={this.chooseCategory} 
+                         chooseCategory={this.chooseCategory}
                 ></SideBar>
                 <main className={classes.content}>
-                    <Graph />
+                    <div className={classes.toolbar} />
+                    <Graph parsedResult={this.state.parsedResult} />
                 </main>
             </div>
         </div>
