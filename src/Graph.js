@@ -13,18 +13,17 @@ class Graph extends Component {
                 yAxes: [{
                     stacked: true
                 }]
+            },
+            animation: {
+                duration: 0
             }
         }; 
-
-        this.state = {
-            data: this.props.parsedResult
-        };
     }
 
     render() {
         return (
             <div className="App">
-                <Bar data={this.state.data} options={this.options}/>
+                <Bar data={this.props.parsedResult} options={this.options}/>
             </div>
         );
     }

@@ -46,7 +46,7 @@ class App extends Component {
         this.poll = new Poll();
 
         let f_categories = this.data.getCategories();
-        let f_chosenCategory = f_categories[0];
+        let f_chosenCategory = 0;
         let f_poll = this.poll.getPoll();
 
         this.state = {
@@ -61,16 +61,29 @@ class App extends Component {
 
 
 
-    chooseCategory(category) {
+    chooseCategory(idx) {
         this.setState({ 
-            chosenCategory: [category],
-            parsedResult: this.data.getParsedResult(category)
+            chosenCategory: idx,
+            parsedResult: this.data.getParsedResult(idx, this.state.poll)
         });
     }
 
 
     render() {
         const { classes } = this.props;
+
+        let sideBar = (
+            <SideBar categories={this.state.categories}
+                chooseCategory={this.chooseCategory}
+            ></SideBar>
+        );
+
+        let graph = (
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Graph parsedResult={this.state.parsedResult} />
+            </main>
+        );
 
         return (
         <div className="App">
@@ -90,13 +103,8 @@ class App extends Component {
                         </Typography>
                     </Toolbar>
                 </AppBar>
-                <SideBar categories={this.state.categories}
-                         chooseCategory={this.chooseCategory}
-                ></SideBar>
-                <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <Graph parsedResult={this.state.parsedResult} />
-                </main>
+                {sideBar}
+                {graph}
             </div>
         </div>
         );

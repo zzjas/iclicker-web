@@ -49,7 +49,7 @@ class SideBar extends Component {
                             selected={this.state.selectIdx === index}
                             onClick={
                                 (event) => {
-                                    this.props.chooseCategory(title);
+                                    this.props.chooseCategory(index);
                                     this.setState({selectIdx: index});
                                 }
                             }>
