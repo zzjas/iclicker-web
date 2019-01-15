@@ -6,10 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 
-
-
 const drawerWidth = 240;
-
 const styles = theme => ({
     drawer: {
         [theme.breakpoints.up('sm')]: {
