@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 
 import Data from './Data';
+import Poll from './Poll';
 
 
 const drawerWidth = 240;
@@ -41,72 +42,72 @@ const styles = theme => ({
 class App extends Component {
     constructor(props) {
         super(props);
-
         this.data = new Data();
+        this.poll = new Poll();
+
+        let f_categories = this.data.getCategories();
+        let f_chosenCategory = 0;
+        let f_poll = this.poll.getPoll();
+
         this.state = {
             data: this.data,
-            categories: this.data.getCategories(),
-            poll: {},
-            chosenCategory: 0,
-            graphData: this.data.getParsedResult(0, {}),
+            categories: f_categories,
+            chosenCategory: f_chosenCategory,
+            poll: f_poll,
+            parsedResult: this.data.getParsedResult(f_chosenCategory, f_poll)
         };
+
+        this.chooseCategory = this.chooseCategory.bind(this);
     }
 
-    componentDidMount() {
-        this.interval = setInterval(() => {
-            fetch('http://localhost:5000/')
-                .then(res => res.json())
-                .then(res => {
-                    this.setState({
-                        graphData: this.data.getParsedResult(this.state.chosenCategory, this.state.poll),
-                        poll: res
-                    })
-                });
-            }, 1000
-        );
+
+
+    chooseCategory(idx) {
+        this.setState({ 
+            chosenCategory: idx,
+            parsedResult: this.data.getParsedResult(idx, this.state.poll)
+        });
     }
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
 
     render() {
         const { classes } = this.props;
 
+        let sideBar = (
+            <SideBar categories={this.state.categories}
+                chooseCategory={this.chooseCategory}
+            ></SideBar>
+        );
+
+        let graph = (
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Graph parsedResult={this.state.parsedResult} />
+            </main>
+        );
+
         return (
-            <div className="App">
-                <div className={classes.root}>
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerToggle}
-                                className={classes.menuButton}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" color="inherit" noWrap>
-                                {(this.state.chosenCategory.length === -1) ? "iClicker" : this.state.categories[this.state.chosenCategory].title}
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
-
-                    <SideBar
-                        categories={this.state.categories}
-                        chooseCategory={(idx) => {
-                            this.setState({
-                                chosenCategory: idx,
-                            });
-                        }}
-                    />
-
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <Graph parsedResult={this.state.graphData} />
-                    </main>
-                </div>
+        <div className="App">
+            <div className={classes.root}>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            onClick={this.handleDrawerToggle}
+                            className={classes.menuButton}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" color="inherit" noWrap>
+                        { (this.state.chosenCategory.length === -1) ? "iClicker" : this.state.categories[this.state.chosenCategory].title}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                {sideBar}
+                {graph}
             </div>
+        </div>
         );
     }
 }
