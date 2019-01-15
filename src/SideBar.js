@@ -36,7 +36,10 @@ class SideBar extends Component {
     render() {
         const { classes, theme } = this.props;
 
-        let titles = this.props.categories.map(cat => cat.title);
+        let titles = [];
+        for(let catId in this.props.categories) {
+            titles.push(this.props.categories[catId].title)
+        }
 
         const drawer = (
             <div>

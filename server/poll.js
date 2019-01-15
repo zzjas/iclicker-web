@@ -2,12 +2,20 @@ const HID = require('node-hid');
 
 const ICLICKER_VID = 6273;
 const ICLICKER_PID = 336;
+const STATE = {
+    "581884": "Software Started",
+    "579580": "Course Switched",
+    "1443576": "Session Started",
+    "142164": "Poll Started",
+    "213758": "Poll Ended",
+};
 
 class Poll {
     constructor() {
         this.iclicker = new HID.HID(ICLICKER_VID, ICLICKER_PID);
         this.sum = 0;
         this.result = {};
+        this.state = undefined;
     }
 
     listen() {
@@ -51,10 +59,21 @@ class Poll {
             else {
                 console.log(hexString);
                 this.sum += parseInt(key, 16);
+                this.state = STATE[this.sum.toString(10)];
 
+                // If the state is recognized
+                if(this.state !== undefined) {
+                    // Clear the  keys
+                    this.sum = 0;
+                    console.log(this.state);
+                }
+
+
+                /*
                 switch(this.sum) {
                     case 581884:
                         this.sum = 0;
+                        this.state = STATE.
                         console.log("Iclicker Software started");
                         break;
                     case 579580:
@@ -74,10 +93,14 @@ class Poll {
                         console.log("Poll Ended");
                         break;
                 }
+                */
             }
         });
     }
-}
 
+    getPoll() {
+        return this.result;
+    }
+}
 
 module.exports = Poll;

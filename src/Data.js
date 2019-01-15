@@ -1,41 +1,72 @@
-import { parse } from 'path';
+let randomColor = (numColors) => {
+    let c = [];
+    for(let i = 0; i < numColors; i++) {
+        let o = Math.round, r = Math.random, s = 255;
+        c.push("rgba(" + o(r()*s) + ", " + o(r()*s) + ", " + o(r()*s) + ", 0.5)");
+    }
+    return c;
+};
 
 class Data {
-    constructor(props) {
+    constructor() {
         this.categories = this.getCategories();
+        console.log(this.categories);
         this.students = this.getStudentsInfo();
     }
 
-    getStudentsInfo() {
-        let numOfStudents = 200;
-        let toReturn = {};
+    getCategories() {
+        function cat(t, opts, c) {
+            return {
+                title: t,
+                options: opts,
+                colors: c,
+            };
+        }
 
-        [...Array(numOfStudents).keys()].forEach(i => {
-            let idx = 's@' + i.toString();
-            toReturn[idx] = this.categories.map(i => {
-                return Math.round(Math.random() * (i.options.length-1));
-            })
-        });
+        let categories = {};
+        Object.assign(categories, [
+            cat('Test for Bigger Number',
+                ['First Dataset', 'Second Dataset'],
+                randomColor(2),
+            ),
+            cat('Do You Know Programming Or Not',
+                ['Expert', 'Familiar', 'Medium', 'A little', 'New'],
+                randomColor(5),
+            ),
+            cat('Which Steak',
+                ['Rare', 'Medium Rare', 'Medium', 'Medium Well', 'Well Done'],
+                randomColor(5),
+            ),
+            cat('What is your favorite programming language?',
+                ['C/C++', 'Java', 'Python', 'JavaScript'],
+                randomColor(4),
+            ),
+        ]);
 
-        return toReturn;
+        return categories;
     }
 
-
+    getStudentsInfo() {
+        return {
+            "9b87a1bd": {0:0, 1:1, 2:0, 3:1},
+            "9d750ae2": {0:1, 1:3, 2:4, 3:2},
+        };
+    }
 
     getParsedResult(idx, poll) {
-        // The test data for chart.js
-        if(idx === 0) {
+        // The example data for chart.js
+        if (idx === 0) {
             return {
                 labels: ['A: 93', 'B: 107', 'C: 120', 'D: 100', 'E: 142'],
                 datasets: [
                     {
                         label: 'My First dataset',
+                        data: [65, 59, 80, 81, 56],
                         backgroundColor: 'rgba(255,99,132,0.2)',
                         borderColor: 'rgba(255,99,132,1)',
                         borderWidth: 1,
                         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                         hoverBorderColor: 'rgba(255,99,132,1)',
-                        data: [65, 59, 80, 81, 56]
                     },
                     {
                         label: 'My Second dataset',
@@ -44,85 +75,71 @@ class Data {
                 ]
             };
         }
+        // The real data for chart.js
         else {
-            return { 
-                labels: this.parseLabel(poll),
-                datasets: this.parse(idx, poll)
-            };
-        }        
+            console.log(poll);
+            if (poll !== {}) {
+                let labels = ["", "", "", "", ""];
+                let labelCounts = [0, 0, 0, 0, 0];
+                /*
+                let datasets = this.categories[idx].options.map(opt => {
+                    return {
+                        label: opt,
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(255,99,132,0.2)',
+                        borderColor: 'rgba(255,99,132,1)',
+                    };
+                });
+                */
 
-    }
-
-
-    parse(catIdx, poll) {
-        if(poll.ok) {
-            let parsedResult = this.categories[catIdx].options.map(opt => {
-                return {
-                    label: opt,
-                    data: [0,0,0,0,0]
-                };
-            });
-
-            
-            poll.result.forEach(s => {
-                let pos = this.students[s.id][catIdx];
-                parsedResult[pos].data[parseInt(s.vote)]++;
-            });
-
-            return parsedResult;
-
-        }
-        else {
-            return [
-                {
-                    label: 'No Data',
-                    data: [100, 100, 100, 100, 100]
+                let datasets = [];
+                for(let i = 0; i < this.categories[idx].options.length; i++) {
+                    datasets.push({
+                        label: this.categories[idx].options[i],
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: this.categories[idx].colors[i],
+                        borderColor: this.categories[idx].colors[i],
+                    })
                 }
-            ];
+
+                // Fulfill datasets with poll results
+                for (let id in poll) {
+                    console.log(idx);
+                    // Get the category of the student
+                    let pos = this.students[id][idx];
+
+                    // Get the index of the student's answer
+                    let index = poll[id].charCodeAt(0) - "A".charCodeAt(0)
+
+                    // Increment the count of the answer by 1
+                    labelCounts[index]++;
+
+                    // Increment the count of the answer in that category by 1
+                    datasets[pos].data[index]++;
+                }
+
+                // Convert label counts to label strings
+                labelCounts.forEach((value, i) => {
+                    labels[i] = String.fromCharCode(i + "A".charCodeAt(0)) + ": " + value;
+                });
+
+                return {
+                    labels: labels,
+                    datasets: datasets,
+                };
+            }
+            else {
+                return {
+                    labels: ['A', 'B', 'C', 'D', 'E'],
+                    datasets: [{
+                        label: 'No Data',
+                        data: [0, 0, 0, 0, 0]
+                    }]
+                }
+            }
         }
-
-    }
-
-
-    parseLabel(poll) {
-        let cnt = [0,0,0,0,0];
-        if(poll.ok) {
-            poll.result.forEach(s => {
-                cnt[s.vote]++;
-            });
-            return [
-                `A: ${cnt[0]}`,
-                `B: ${cnt[1]}`,
-                `C: ${cnt[2]}`,
-                `D: ${cnt[3]}`,
-                `E: ${cnt[4]}`
-            ];
-        }
-        else {
-            return ['A', 'B', 'C', 'D', 'E'];
-        }
-    }
-
-    getCategories() {
-        function cat(t, opts) {
-            return {
-                title: t,
-                options: opts
-            };
-        }
-
-        return [
-            cat('Test for Bigger Number',
-                ['First Dataset', 'Second Dataset']),
-            cat('Do You Know Programming Or Not',
-                ['Expert','Familiar','Medium','A little','New']),
-            cat('Which Steak',
-                ['Rare','Medium Rare','Medium','Medium Well','Well Done']),
-            cat('What is your favorite programming language?',
-                ['C/C++','Java','Python','JavaScript'])
-        ];
     }
 }
 
-
 export default Data;
+
