@@ -50,6 +50,7 @@ class App extends Component {
         let f_poll = this.poll.getPoll();
 
         this.state = {
+            data: this.data,
             categories: f_categories,
             chosenCategory: f_chosenCategory,
             poll: f_poll,

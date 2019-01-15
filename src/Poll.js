@@ -1,15 +1,21 @@
 class Poll {
     getPoll() {
         let testPollSize = 200;
-        let opts = ['A', 'B', 'C', 'D', 'E'];
-        let toReturn = {};
+        let poll = {
+            ok: true,
+            result: []
+        };
 
         [...Array(testPollSize).keys()].forEach(i => {
-            let idx = i.toString();
-            toReturn[idx] = opts[Math.round(Math.random() * 4)]
+            let idx = 's@' + i.toString();
+            poll.result.push({
+                id: idx,
+                vote: Math.round(Math.random() * 4)
+            });
+            
         });
         
-        return toReturn;
+        return poll;
     }
 }
 
