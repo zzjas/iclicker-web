@@ -19,6 +19,7 @@ class Graph extends Component {
             }
         }; 
 
+        /* These are some background colors
         this.bgColors = [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -35,6 +36,7 @@ class Graph extends Component {
             'rgba(153, 102, 255, 0.4)',
             'rgba(255, 159, 64, 0.4)'
         ];
+        */
     }
 
     render() {

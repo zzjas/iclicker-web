@@ -100,7 +100,7 @@ class App extends Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" color="inherit" noWrap>
-                        { (this.state.chosenCategory.length > 0) ? this.state.chosenCategory[0] : "iClicker" }
+                        { (this.state.chosenCategory.length === -1) ? "iClicker" : this.state.categories[this.state.chosenCategory].title}
                         </Typography>
                     </Toolbar>
                 </AppBar>
