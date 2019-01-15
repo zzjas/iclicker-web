@@ -114,12 +114,12 @@ class Data {
         return [
             cat('Test for Bigger Number',
                 ['First Dataset', 'Second Dataset']),
-            cat('Know Programming Or Not',
+            cat('Do You Know Programming Or Not',
                 ['Expert','Familiar','Medium','A little','New']),
             cat('Which Steak',
                 ['Rare','Medium Rare','Medium','Medium Well','Well Done']),
-            cat('How much do you like C language',
-                ['10','9','8','7','6','5','4','3','2','1'])
+            cat('What is your favorite programming language?',
+                ['C/C++','Java','Python','JavaScript'])
         ];
     }
 }
