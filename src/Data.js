@@ -26,7 +26,7 @@ class Data {
         // The test data for chart.js
         if(idx === 0) {
             return {
-                labels: ['A', 'B', 'C', 'D', 'E'],
+                labels: ['A: 93', 'B: 107', 'C: 120', 'D: 100', 'E: 142'],
                 datasets: [
                     {
                         label: 'My First dataset',
@@ -46,12 +46,13 @@ class Data {
         }
         else {
             return { 
-                labels: ['A', 'B', 'C', 'D', 'E'],
+                labels: this.parseLabel(poll),
                 datasets: this.parse(idx, poll)
             };
         }        
 
     }
+
 
     parse(catIdx, poll) {
         if(poll.ok) {
@@ -80,6 +81,26 @@ class Data {
             ];
         }
 
+    }
+
+
+    parseLabel(poll) {
+        let cnt = [0,0,0,0,0];
+        if(poll.ok) {
+            poll.result.forEach(s => {
+                cnt[s.vote]++;
+            });
+            return [
+                `A: ${cnt[0]}`,
+                `B: ${cnt[1]}`,
+                `C: ${cnt[2]}`,
+                `D: ${cnt[3]}`,
+                `E: ${cnt[4]}`
+            ];
+        }
+        else {
+            return ['A', 'B', 'C', 'D', 'E'];
+        }
     }
 
     getCategories() {
