@@ -6,10 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 
-
-
 const drawerWidth = 240;
-
 const styles = theme => ({
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -36,7 +33,10 @@ class SideBar extends Component {
     render() {
         const { classes, theme } = this.props;
 
-        let titles = this.props.categories.map(cat => cat.title);
+        let titles = [];
+        for(let catId in this.props.categories) {
+            titles.push(this.props.categories[catId].title)
+        }
 
         const drawer = (
             <div>
