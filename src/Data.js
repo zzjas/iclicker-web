@@ -1,5 +1,3 @@
-import { parse } from 'path';
-
 class Data {
     constructor(props) {
         this.categories = this.getCategories();
