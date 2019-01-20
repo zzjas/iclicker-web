@@ -51,6 +51,7 @@ class App extends Component {
     }
 
     componentDidMount() {
+        /*
         this.interval = setInterval(() => {
             fetch('http://localhost:5000/')
                 .then(res => res.json())
@@ -62,6 +63,7 @@ class App extends Component {
                 });
             }, 1000
         );
+        */
     }
 
     componentWillUnmount() {

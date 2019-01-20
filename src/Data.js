@@ -70,28 +70,30 @@ class Data {
                     },
                     {
                         label: 'My Second dataset',
-                        data: [28, 48, 40, 19, 86]
+                        data: [28, 48, 40, 19, 86],
+                        backgroundColor: 'rgba(255,99,132,0.2)',
+                        borderColor: 'rgba(255,99,132,1)',
+                        borderWidth: 1,
+                        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                        hoverBorderColor: 'rgba(255,99,132,1)',
+                    },
+                    {
+                        label: 'My Third dataset',
+                        data: [52, 34, 41, 21, 38],
+                        backgroundColor: 'rgba(255,99,132,0.2)',
+                        borderColor: 'rgba(255,99,132,1)',
+                        borderWidth: 1,
+                        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                        hoverBorderColor: 'rgba(255,99,132,1)',
                     }
                 ]
             };
         }
         // The real data for chart.js
         else {
-            console.log(poll);
             if (poll !== {}) {
                 let labels = ["", "", "", "", ""];
                 let labelCounts = [0, 0, 0, 0, 0];
-                /*
-                let datasets = this.categories[idx].options.map(opt => {
-                    return {
-                        label: opt,
-                        data: [0, 0, 0, 0, 0],
-                        backgroundColor: 'rgba(255,99,132,0.2)',
-                        borderColor: 'rgba(255,99,132,1)',
-                    };
-                });
-                */
-
                 let datasets = [];
                 for(let i = 0; i < this.categories[idx].options.length; i++) {
                     datasets.push({
