@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Hidden from '@material-ui/core/Hidden';
-import Drawer from '@material-ui/core/Drawer';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { withStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
@@ -21,75 +20,48 @@ const styles = theme => ({
 
 
 class SideBar extends Component {
-    state = {
-        mobileOpen: false,
-        selectIdx: -1
-    };
+    constructor(props) {
+        super(props);
 
-    handleDrawerToggle = () => {
-        this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-    };
+        this.state = {
+            open: true,
+        }
+    }
 
     render() {
-        const { classes, theme } = this.props;
-
         let titles = [];
         for(let catId in this.props.categories) {
             titles.push(this.props.categories[catId].title)
         }
 
-        const drawer = (
-            <div>
-                <div className={classes.toolbar} />
-                <List>
-                    { titles.map((title, index) => (
-                        <ListItem 
-                            button
-                            key={title}
-                            selected={this.state.selectIdx === index}
-                            onClick={
-                                (event) => {
-                                    this.props.chooseCategory(index);
-                                    this.setState({selectIdx: index});
-                                }
-                            }>
-                            <ListItemText primary={title} />
-                        </ListItem>
-                    ))}
-                </List>
-            </div>
-        );
-
-
         return(
-                <nav className={classes.drawer}>
-                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                    <Hidden smUp implementation="css">
-                        <Drawer
-                            container={this.props.container}
-                            variant="temporary"
-                            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                            open={this.state.mobileOpen}
-                            onClose={this.handleDrawerToggle}
-                            classes={{
-                                paper: classes.drawerPaper,
-                            }}
-                        >
-                            {drawer}
-                        </Drawer>
-                    </Hidden>
-                    <Hidden xsDown implementation="css">
-                        <Drawer
-                            classes={{
-                                paper: classes.drawerPaper,
-                            }}
-                            variant="permanent"
-                            open
-                        >
-                            {drawer}
-                        </Drawer>
-                    </Hidden>
-                </nav>
+            <div>
+                <SwipeableDrawer
+                    open={this.props.drawerOpen}
+                    onClose={() => {
+                        this.props.handleDrawer(false)
+                    }}
+                    onOpen={() => {
+                        this.props.handleDrawer(true)
+                    }}
+                >
+                        <List>
+                            {titles.map((title, index) => (
+                                <ListItem
+                                    button
+                                    key={title}
+                                    selected={this.state.selectIdx === index}
+                                    onClick={(event) => {
+                                            this.props.chooseCategory(index);
+                                            this.setState({selectIdx: index});
+                                    }}
+                                >
+                                    <ListItemText primary={title} />
+                                </ListItem>
+                            ))}
+                        </List>
+                </SwipeableDrawer>
+            </div>
         );
     }
 }

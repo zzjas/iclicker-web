@@ -65,3 +65,6 @@ typings/
 
 # for Visual Studio Code
 *.code-workspace
+
+# for build files
+build/

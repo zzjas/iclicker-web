@@ -1,111 +1,167 @@
 import React, { Component } from 'react';
-import SideBar from './SideBar';
-import Graph from './Graph';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton';
+import firebase from 'firebase'
+
 import { withStyles } from '@material-ui/core/styles';
 
-import Data from './Data';
+import BottomBar from './BottomBar';
+import SideBar from './SideBar';
+import Graph from './Graph';
 
+const firebaseConfig = {
+    apiKey: "AIzaSyAIx7g02y5LBOg427Pg3nXaR7zeHT33D5A",
+    authDomain: "iclicker-web.firebaseapp.com",
+    databaseURL: "https://iclicker-web.firebaseio.com",
+    projectId: "iclicker-web",
+    storageBucket: "iclicker-web.appspot.com",
+    messagingSenderId: "673662120586"
+};
 
-const drawerWidth = 240;
-
-const styles = theme => ({
-    root: {
-        display: 'flex',
-    },
-    appBar: {
-        marginLeft: drawerWidth,
-        [theme.breakpoints.up('sm')]: {
-            width: `calc(100% - ${drawerWidth}px)`,
-        },
-    },
-    menuButton: {
-        marginRight: 20,
-        [theme.breakpoints.up('sm')]: {
-            display: 'none',
-        },
-    },
-    toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing.unit * 3,
-    },
-});
+const styles = theme => ({});
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        this.data = new Data();
         this.state = {
-            data: this.data,
-            categories: this.data.getCategories(),
-            poll: {},
-            chosenCategory: 0,
-            graphData: this.data.getParsedResult(0, {}),
+            loading: true,
+            drawerOpen: false,
+            categoryId: -1,
+            graphData: this.getGraphData(-1, {}),
+            selectOne: false,
         };
-    }
 
-    componentDidMount() {
-        /*
-        this.interval = setInterval(() => {
-            fetch('http://localhost:5000/')
-                .then(res => res.json())
-                .then(res => {
-                    this.setState({
-                        graphData: this.data.getParsedResult(this.state.chosenCategory, this.state.poll),
-                        poll: res
-                    })
+        this.db = !firebase.apps.length ?
+            firebase.initializeApp(firebaseConfig).firestore() :
+            firebase.app().firestore();
+
+        this.students = {};
+        this.categories = {};
+        let studentsPromise = this.db.collection('students').get();
+        let categoriesPromise = this.db.collection('categories').get();
+        Promise.all([studentsPromise, categoriesPromise])
+            .then((snapshot) => {
+                snapshot[0].forEach(doc => {
+                    this.students[doc.id] = doc.data();
                 });
-            }, 1000
-        );
-        */
+
+                snapshot[1].forEach(doc => {
+                    this.categories[doc.id] = doc.data();
+                });
+
+
+                let idx = Object.keys(this.categories).length - 1;
+                this.setState({
+                    loading: false,
+                    categoryId: idx,
+                    graphData: this.getGraphData(idx, this.poll),
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+
+        this.poll = {};
+        this.db.collection('polls').doc('currentPoll').onSnapshot(docSnapshot => {
+            this.poll = docSnapshot.data();
+
+            this.setState({
+                graphData: this.getGraphData(this.state.categoryId, this.poll)
+            })
+        }, err => {
+            console.log(`Encountered error: ${err}`);
+        });
     }
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
+    getGraphData(categoryId, poll) {
+        if (categoryId !== -1) {
+            if (poll !== {}) {
+                let labels = ["", "", "", "", ""];
+                let labelCounts = [0, 0, 0, 0, 0];
+                let datasets = [];
+                for(let i = 0; i < this.categories[categoryId].options.length; i++) {
+                    datasets.push({
+                        label: this.categories[categoryId].options[i],
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: this.categories[categoryId].colors[i],
+                        borderColor: this.categories[categoryId].colors[i],
+                    })
+                }
+
+                // Fulfill datasets with poll results
+                for (let id in poll) {
+                    // Get the category of the student
+                    let pos = this.students[id][categoryId];
+
+                    // Get the index of the student's answer
+                    let index = poll[id].charCodeAt(0) - "A".charCodeAt(0)
+
+                    // Increment the count of the answer by 1
+                    labelCounts[index]++;
+
+                    // Increment the count of the answer in that category by 1
+                    datasets[pos].data[index]++;
+                }
+
+                // Convert label counts to label strings
+                labelCounts.forEach((value, i) => {
+                    labels[i] = String.fromCharCode(i + "A".charCodeAt(0)) + ": " + value;
+                });
+
+                return {
+                    labels: labels,
+                    datasets: datasets,
+                };
+            }
+            else {
+                return {
+                    labels: ['A', 'B', 'C', 'D', 'E'],
+                    datasets: [{
+                        label: 'No Data',
+                        data: [0, 0, 0, 0, 0]
+                    }]
+                }
+            }
+        }
+        else return {};
     }
 
     render() {
-        const { classes } = this.props;
-
         return (
             <div className="App">
-                <div className={classes.root}>
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerToggle}
-                                className={classes.menuButton}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" color="inherit" noWrap>
-                                {(this.state.chosenCategory.length === -1) ? "iClicker" : this.state.categories[this.state.chosenCategory].title}
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
+                {
+                    this.state.loading ? 'loading' :
+                        <div>
+                            <BottomBar
+                                toggleDrawer={() => {
+                                    this.setState({drawerOpen: !this.state.drawerOpen})
+                                }}
+                                categories={this.categories}
+                                categoryId={this.state.categoryId}
+                                setSelectOne={(checked) => {
+                                    this.setState({selectOne: checked})
+                                }}
+                            />
 
-                    <SideBar
-                        categories={this.state.categories}
-                        chooseCategory={(idx) => {
-                            this.setState({
-                                chosenCategory: idx,
-                            });
-                        }}
-                    />
+                            <SideBar
+                                categories={this.categories}
+                                chooseCategory={(idx) => {
+                                    this.setState({
+                                        categoryId: idx,
+                                        graphData: this.getGraphData(idx, this.poll),
+                                    });
+                                }}
+                                drawerOpen={this.state.drawerOpen}
+                                handleDrawer={(open) => {
+                                    this.setState({drawerOpen: open});
+                                }}
+                            />
 
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <Graph parsedResult={this.state.graphData} />
-                    </main>
-                </div>
+                            <Graph
+                                graphData={this.state.graphData}
+                                selectOne={this.state.selectOne}
+                            />
+                        </div>
+                }
             </div>
         );
     }

@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/zzjas/iclicker-web/issues"
   },
-  "homepage": "https://github.com/zzjas/iclicker-web#readme",
+  "homepage": "https://iclicker-web.firebaseapp.com/",
   "devDependencies": {},
   "dependencies": {
     "@material-ui/core": "^3.8.1",
@@ -27,6 +27,7 @@
     "chart.js": "^2.7.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "firebase": "^5.8.0",
     "node-hid": "^0.7.6",
     "react": "^16.7.0",
     "react-chartjs-2": "^2.7.4",

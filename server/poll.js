@@ -1,4 +1,5 @@
 const HID = require('node-hid');
+const firebase = require('firebase');
 
 const ICLICKER_VID = 6273;
 const ICLICKER_PID = 336;
@@ -10,12 +11,26 @@ const STATE = {
     "213758": "Poll Ended",
 };
 
+const firebaseConfig = {
+    apiKey: "AIzaSyAIx7g02y5LBOg427Pg3nXaR7zeHT33D5A",
+    authDomain: "iclicker-web.firebaseapp.com",
+    databaseURL: "https://iclicker-web.firebaseio.com",
+    projectId: "iclicker-web",
+    storageBucket: "iclicker-web.appspot.com",
+    messagingSenderId: "673662120586"
+};
+
 class Poll {
     constructor() {
         this.iclicker = new HID.HID(ICLICKER_VID, ICLICKER_PID);
         this.sum = 0;
         this.result = {};
         this.state = undefined;
+
+        this.poll = !firebase.apps.length ?
+            firebase.initializeApp(firebaseConfig).firestore().collection('polls') :
+            firebase.app().firestore().collection('polls');
+
     }
 
     listen() {
@@ -53,7 +68,10 @@ class Poll {
                 let iclickerId = response.substring(6, 12) + tail;
 
                 console.log(seqId + " " + iclickerId + ": " + answer);
+
+                // Update to the database
                 this.result[iclickerId] = answer;
+                this.poll.doc('currentPoll').set(this.result)
             }
             // If the message is not a response, identify the message by adding up the current key with the past keys
             else {
@@ -65,42 +83,27 @@ class Poll {
                 if(this.state !== undefined) {
                     // Clear the  keys
                     this.sum = 0;
+
+                    switch(this.state) {
+                        case "Software Started":
+                            break;
+                        case "Course Switched":
+                            break;
+                        case "Session Started":
+                            break;
+                        case "Poll Started":
+                            this.poll.doc('currentPoll').delete();
+                            break;
+                        case "Poll Ended":
+                            break;
+                    }
+
                     console.log(this.state);
                 }
-
-
-                /*
-                switch(this.sum) {
-                    case 581884:
-                        this.sum = 0;
-                        this.state = STATE.
-                        console.log("Iclicker Software started");
-                        break;
-                    case 579580:
-                        this.sum = 0;
-                        console.log("Course switched");
-                        break;
-                    case 1443576:
-                        this.sum = 0;
-                        console.log("New Session Started");
-                        break;
-                    case 142164:
-                        this.sum = 0;
-                        console.log("Poll Started");
-                        break;
-                    case 213758:
-                        this.sum = 0;
-                        console.log("Poll Ended");
-                        break;
-                }
-                */
             }
         });
     }
-
-    getPoll() {
-        return this.result;
-    }
 }
 
-module.exports = Poll;
+let poll = new Poll();
+poll.listen();
