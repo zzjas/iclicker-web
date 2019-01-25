@@ -93,7 +93,7 @@ class App extends Component {
                     let pos = this.students[id][categoryId];
 
                     // Get the index of the student's answer
-                    let index = poll[id].charCodeAt(0) - "A".charCodeAt(0)
+                    let index = poll[id].charCodeAt(0) - "A".charCodeAt(0);
 
                     // Increment the count of the answer by 1
                     labelCounts[index]++;

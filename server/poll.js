@@ -1,5 +1,4 @@
 const HID = require('node-hid');
-const firebase = require('firebase');
 
 const ICLICKER_VID = 6273;
 const ICLICKER_PID = 336;
@@ -11,25 +10,14 @@ const STATE = {
     "213758": "Poll Ended",
 };
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAIx7g02y5LBOg427Pg3nXaR7zeHT33D5A",
-    authDomain: "iclicker-web.firebaseapp.com",
-    databaseURL: "https://iclicker-web.firebaseio.com",
-    projectId: "iclicker-web",
-    storageBucket: "iclicker-web.appspot.com",
-    messagingSenderId: "673662120586"
-};
-
 class Poll {
-    constructor() {
+    constructor(firestore) {
         this.iclicker = new HID.HID(ICLICKER_VID, ICLICKER_PID);
         this.sum = 0;
         this.result = {};
         this.state = undefined;
 
-        this.poll = !firebase.apps.length ?
-            firebase.initializeApp(firebaseConfig).firestore().collection('polls') :
-            firebase.app().firestore().collection('polls');
+        this.poll = firestore.collection('polls');
 
     }
 
@@ -105,5 +93,4 @@ class Poll {
     }
 }
 
-let poll = new Poll();
-poll.listen();
+module.exports = Poll;

@@ -55,10 +55,6 @@ class BottomBar extends Component {
                             {this.props.categoryId === -1 ? 'Iclicker-web' : this.props.categories[this.props.categoryId].title}
                         </Typography>
 
-                        <Fab color="secondary" aria-label="Add" className={this.props.classes.fabButton}>
-                            asdf
-                        </Fab>
-
                         <Switch
                             checked={this.props.selectOne}
                             onChange={(event, checked) => {
